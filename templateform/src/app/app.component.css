@@ -1,0 +1,20 @@
+/* Ensure the body and html take up the full height */
+
+
+.formContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: auto;
+    background-color:#ccc;
+}
+h1{
+    text-align: center;
+}
+.formBorder{
+    border: 1px solid #ccc; 
+    border-radius: 10px;
+    background-color: #fff; 
+    padding: 30px; 
+}

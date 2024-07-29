@@ -1,0 +1,180 @@
+<div class="formContainer">
+  <form #userForm="ngForm" (ngSubmit)="submitUserDetail(userForm)">
+    <h1>Template Driven Form</h1>
+    <div class="formBorder">
+      <div class="form-row">
+        <div class="col">
+          <label>First Name</label>
+          <input type="text" class="form-control" placeholder="First name" name="firstName" [(ngModel)]="userFormInput.firstName" required minlength="5" #firstName="ngModel"  (keypress)="preventInvalidChars($event)" />
+          <div *ngIf="firstName.invalid"  class="text-danger">
+            <div *ngIf="firstName.errors?.['required'] && firstName.touched">First name is required.</div>
+            <div *ngIf="firstName.errors?.['minlength'] && firstName.touched">First Name must be 5 letters</div>
+          </div>
+        </div>
+        <div class="col">
+          <label>Last Name</label>
+          <input type="text" class="form-control" placeholder="Last name" name="lastName" [(ngModel)]="userFormInput.lastName" required minlength="5" #lastName="ngModel" (keypress)="preventInvalidChars($event)"/>
+          <div *ngIf="lastName.invalid " class="text-danger">
+            <div *ngIf="lastName.errors?.['required'] && lastName.touched">Last name is required.</div>
+            <div *ngIf="lastName.errors?.['minlength'] && lastName.touched">Last name must be 5 letters</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row pt-3 ">
+        <div class="form-group col-md-6">  
+          <div>Gender</div>
+          <div class="form-check form-check-inline pt-3">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Male" [(ngModel)]="userFormInput.gender">
+            <label class="form-check-label" for="inlineRadio1">Male</label>
+          </div>
+          <div class="form-check form-check-inline pt-2">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Female" [(ngModel)]="userFormInput.gender">
+            <label class="form-check-label" for="inlineRadio2">Female</label>
+          </div>
+        </div>
+          
+
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="inputEmail4"
+            placeholder="Email"
+            name="email"
+            [(ngModel)]="userFormInput.email"
+            required
+            #email="ngModel"
+            />
+            <div *ngIf="!isGmailOrYahooEmail(userFormInput.email) && email.touched" class="text-danger">Provide a proper Email.</div>
+            <div *ngIf="email.errors?.['required'] && email.touched" class="text-danger">Email is required.</div>
+          </div>
+      </div>
+
+
+
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputPassword">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="inputPassword"
+            placeholder="Password"
+            name="password"
+            [(ngModel)]="userFormInput.password"
+            required
+            minlength="2"
+            #password="ngModel"
+          />
+          <div *ngIf="password.invalid && (password.dirty || password.touched)" >
+            <div *ngIf="password.errors?.['required']" class="text-danger">Password is required. </div>
+            <div *ngIf="password.errors?.['minlength']" class="text-danger">Please enter atleast 2 digits </div>
+          </div>
+        </div>
+      
+        <div class="form-group col-md-6">
+          <label for="inputConfirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="inputConfirmPassword"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            [(ngModel)]="userFormInput.confirmPassword"
+            required
+            minlength="2"
+            #confirmPassword="ngModel"
+            [ngClass]="{'is-invalid': confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched || passwordMismatch)}"
+            (ngModelChange)="checkPasswordMatch()"
+          />
+          <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched || passwordMismatch)" >
+            <div *ngIf="confirmPassword.errors?.['required']" class="text-danger">Confirm Password is required.</div>
+            <div *ngIf="passwordMismatch" class="text-danger">Passwords do not match.</div>
+            <div *ngIf="password.errors?.['minlength']" class="text-danger">Please enter atleast 2 digits </div>
+          </div>
+        </div>
+      </div>
+
+    
+
+      <div class="form-group">
+        <label for="inputAddress">Address</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputAddress"
+          placeholder="1234 Main St"
+          name="address"
+          [(ngModel)]="userFormInput.address"
+          required
+          #address="ngModel"
+        />
+        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="text-danger">
+          <div *ngIf="address.errors?.['required']">Address is required.</div>
+        </div>
+      </div>
+
+
+      
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="inputCity">City</label>
+          <input type="text" 
+          class="form-control" 
+          id="inputCity" 
+          name="city" 
+          (keypress)="preventInvalidChars($event)"
+          [(ngModel)]="userFormInput.city" 
+          required 
+          #city="ngModel"/>
+          <div *ngIf="city.invalid && (city.dirty || city.touched)" class="text-danger"  >
+            <div *ngIf="city.errors?.['required']">City is required.</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputState">State</label>
+          <select id="inputState" class="form-control" name="state" [(ngModel)]="userFormInput.state" required #state="ngModel">
+            <option selected disabled value="">Choose...</option>
+            <option *ngFor="let state of states" [value]="state">{{state}}</option>
+          </select>
+          <div *ngIf="state.invalid && (state.dirty || state.touched)" class="text-danger">
+            <div *ngIf="state.errors?.['required']">State is required.</div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputZip">Zip</label>
+          <input type="text" 
+                  class="form-control" 
+                  id="inputZip" 
+                  name="zip" 
+                  [(ngModel)]="userFormInput.zip" 
+                  required 
+                  #zip="ngModel"
+                  (keypress)="preventInvalidAlphabets($event)"
+                  minlength="6"
+                  maxlength="6"
+                  />
+          <div *ngIf="zip.invalid &&  zip.touched" class="text-danger">
+            <div *ngIf="zip.errors?.['required']">Zip is required.</div>
+            <div *ngIf="zip.errors?.['minlength']">Zip Should be of 6 Digits</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck" name="terms" [(ngModel)]="userFormInput.terms" required #terms="ngModel"/>
+          <label class="form-check-label" for="gridCheck"> Check me out </label>
+          <div *ngIf="terms.invalid && (terms.dirty || terms.touched)" class="text-danger">
+            <div *ngIf="terms.errors?.['required']">You must agree to the terms.</div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid" >Sign in</button>
+      
+    </div>
+  </form>
+</div>
+
+
